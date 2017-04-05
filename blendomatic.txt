@@ -1,0 +1,22 @@
+blendomatic.dat controls blending between different terrains. This is
+done by alpha blending two terrain tiles and looking up the resulting
+color in view_icm.dat to get a palette index.
+
+There are 4 different blend modes in AoK and 9 in TC. Every blend mode
+describes 31 tiles.
+
+The general file format is as follows:
+
+int numModes	// 4 in AoK, 9 in TC; ignored by the game
+int numTiles	// 31; ignored by the game
+repeat numModes {
+	int   tileSize           // the number of pixels, always 2353 since we only have flat tiles
+	uchar tileHasAlpha[31]   // if 1, tile has alpha mask
+	uint  tileBits[tileSize] // one bit per pixel. 1 means alpha != 0, 0 means alpha == 0
+	                         // the bit for pixel n of tile m is `tileBits[n] & 1<<m`
+	if tileHasAlpha[n]
+		uchar tileAlpha[tileSize]   // the pixels' alpha values. 0x80 == 1.0
+}
+
+See blendomatic_tc.bmp for the alpha masks and blendomatic_tc_bits.bmp for the bit masks
+of TC's blendomatic.dat

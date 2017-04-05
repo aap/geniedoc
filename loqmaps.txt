@@ -1,0 +1,29 @@
+LoQMaps.dat is very similar to FilterMaps.dat in both structure and purpose.
+It seems to do a lower quality texture mapping than FilterMaps.dat with no
+blending and simpler lighting.
+
+The data structures are the same as in FilterMaps.dat, the only difference
+are the pixel descriptions (what I called cmds in the FilterMaps documentation).
+
+Every scanline begins with the number of pixels for that line, interestingly stored
+as a 4 byte int (only one byte in FilterMaps.dat).
+After that every pixel takes 3 bytes, a ushort is again the offset of the source
+palette index in the SLP, and the third byte is the index of the ICM used to light
+the pixel.
+
+Again, example code:
+
+	uchar *cmd;
+	int width;
+	ushort pixel;
+	uchar icmidx;
+	for(i = 0; i < map->height; i++){
+		width = *(int*)cmd;
+		cmd += 4;
+		for(j = 0; j < width; j++){
+			pixel = *(ushort*)(cmd);
+			icmidx = cmd[2];
+			cmd += 3;
+			// Do something here
+		}
+	}

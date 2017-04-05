@@ -1,0 +1,34 @@
+BlkEdge.dat and TileEdge.dat have the same format. They seem to be used
+to mask off pixels of terrain tiles at the end of the explored map and
+divide tiles into a visible and fogged part respectively.
+
+The structures in memory are:
+
+struct Edge
+{
+	Slope *slope[17];
+};
+
+struct Slope
+{
+	Span *tiles[n];	// n = 94 for TileEdge, 47 for BlkEdge
+};
+
+struct Span
+{
+	char y, x0, x1;
+};
+
+To read the files, the complete file contents are interpreted as
+an Edge struct. All pointers in the above description are stored
+as offsets from the beginning of the file and relocated at runtime.
+
+Every tile is made up of a number of scanlines starting at (y, x0)
+and ending at (y, x1) (inclusive).
+The end of the span array is indicated by y, x0 and x1 being -1;
+
+TileEdge tiles come in pair of two, one being the complement of
+the other. Presumable to separate the visible and fogged area.
+
+See blkedge.bmp and tileedge.bmp for a visualisation. The
+span areas are marked white.

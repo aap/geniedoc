@@ -1,0 +1,16 @@
+PatternMasks.dat contains some sort of light maps. Its purpose is not yet clear to me,
+however the format is very simple:
+
+repeat 40 {
+	int size	// always 4096
+	uchar data[size];
+}
+
+The data can be interpreted as a 64x64 pixel indexed/greyscale image.
+The maps seem to be arranged in pairs of two where one is some sort of
+complement of the other. This gives 20 pairs.
+The purpose is not quite clear to me but it is likely used together with
+lightMaps.dat and the texture indices in FilterMaps.dat, which can exactly
+index a 64x64 map.
+
+See patternmasks.bmp (arranged in 4x10 however)

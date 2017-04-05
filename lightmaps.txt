@@ -1,0 +1,10 @@
+Lightmaps.dat has basically the same format as PatternMasks.dat,
+the only difference is that there are only 18 instead of 40 maps,
+and that the indices select an ICM, so are in range 0-8.
+
+The purpose is not quite clear to me. The maps seem to be rather uniform in color
+with just a little bit of noise. Probably used together with PatternMasks.dat and
+FilterMaps.dat.
+
+See lightmaps.bmp for a visualisation. Since the ICM indices are so
+low, I multiplied them with 16 to make them more visible.

@@ -1,0 +1,46 @@
+view_icm.dat defines a number of inverse color maps to convert
+RGB colors to palette indices.
+
+Every ICM is a three-dimensional array of 32x32x32 bytes. To get
+the index for an RGB color, index the array like this:
+  idx = icm[r>>3][g>>3][b>>3]
+I.e. the upper 5 bits are used as indices.
+
+AoK defines 9 ICMs (0-8); 4 being neutral, 0-3 being darkened,
+5-8 being brightened. TC has one more at the end which seems to
+be the neutral one as well. These are used for lighting sloped
+terrain tiles and finding palette indices after blending
+RGB colors (for terrain blending e.g.).
+
+To generate the neutral ICM, calculate the 24 bit RGB value for
+a pixel (with channels in range 0-31) like this:
+	r8 = (r5 << 3) + 2;
+	g8 = (g5 << 3) + 2;
+	b8 = (b5 << 3) + 2;
+And use a simple euclidean distance in RGB space to find the closest
+color in the palette.
+
+The algorithm used to darken/brighten seems to differ between
+final AoK and TC (AoK alphas and betas look close to TC).
+The general algorithm is this:
+Convert the neutral color (see formula above) to HSV space,
+multiply S and V by some coefficients (and clamp), convert
+back to RGB and find the nearest palette color.
+
+For AoK the S and V coefficients of ICM 0 are 0.8 and 0.6 resp.
+and increment linearly to 1.0 1.0 for ICM 4 (neutral).
+To brighten the coefficients increment from 1.0 1.0 at ICM 4
+to approx. 0.93 1.19 for ICM 8.
+N.B.: Those coefficients were found heuristically. They don't
+match the game's ICMs 100% but are very close. Matt Pritchard
+might have used a different algorithm to convert between RGB
+and HSV and also used another algorithm to find the closest
+palette index (he mentioned a higher resolution ICM).
+
+According to Matt Pritchard some palette colors were "system
+colors" and not used for the ICM lookup. I have not investigated
+this yet.
+
+See view_icm_*.bmp for several game ICMs (the last on in TC ignored).
+view_icm_24.bmp for a newly generated 24 bit ICM and view_icm_pal.bmp
+for a newly generated ICM for the AoK palette.

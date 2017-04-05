@@ -1,0 +1,36 @@
+STemplet.dat contains SLP templates used as a base for sloped terrain tiles.
+SLP templates are used to create single frame SLPs. They do not store actual
+drawing commands but provide the general structure of an SLP.
+
+In memory an SLP template is stored like this:
+
+struct SlpTemplate
+{
+	int width;
+	int height;
+	int centerX;
+	int centerY;
+	int dataSize;
+	short *outlineTbl;	// 2*height elements
+	int *cmdOffsetTbl;	// height elements
+};
+
+Width, height, centerX and centerY are just copied into the SLP frame header.
+DataSize is the size of the drawing command area of the SLP (i.e. it does
+not include the SLP header, frame header and both tables).
+OutlineTbl and cmdOffsetTbl are the same as their SLP counterparts and are
+just copied into the SLP.
+
+When written to a file, both pointers are stored as offsets from the SlpTemplate.
+
+The structure of STemplet.dat is then very simple:
+
+repeat 17 {	// 17 slope types
+	int size;
+	uchar template[size];
+}
+
+Where every template is actually an SlpTemplate (and with offsets instead
+of pointers as explained above).
+
+See stemplet.bmp for the shape of the tiles (generated from the outline table).
