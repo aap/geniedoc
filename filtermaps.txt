@@ -1,5 +1,6 @@
 FilterMaps.dat is used to texture map and light flat terrain tiles onto sloped
-tiles using the SLP templates defined in STemplet.dat.
+tiles using the SLP templates defined in STemplet.dat. It is used for high
+and medium quality terrain rendering.
 
 The basic file structure is this:
 
@@ -21,15 +22,16 @@ Cmds describes how every pixel of the sloped tile is generated from the flat til
 Every scanline starts with a byte giving the number of destination pixels in this line;
 after that come the pixel descriptions.
 Every destination pixel starts with the number of source pixels and a texture coordinate
-into a light map (TODO: it is not entirely clear to me what exactly these lightmaps are;
-lightMaps.dat has 18 and PatternMasks.dat 40 64x64 textures/tables). They are stored
-together in a ushort such that the lower 4 bits are the number of source pixels to be
-blended togethre and the upper 12 bits are an index into a 64x64 texture map.
+into a pattern mask and light map (which see). They are stored together in a ushort such
+that the lower 4 bits are the number of source pixels to be blended together and the
+upper 12 bits are an index into a 64x64 texture map.
 After that come the source pixels with 3 bytes each. Interpreted as a little endian 24 bit
 value the lower 9 bits are the alpha blend value (0x100 = 1.0) and the upper 15 bits are
 the byte offset into the source SLP command area giving the palette index for this pixel.
 Due to the structure of the terrain SLP frames the first pixels of each row will be at offsets
 1, 4, 11, etc.
+
+With medium quality terrain rendering no texture filtering seems to occur.
 
 Since code may be clearer than words, here's some example code:
 
@@ -52,3 +54,5 @@ Since code may be clearer than words, here's some example code:
 			}
 		}
 	}
+
+See filtermaps_nolight.bmp for a texture mapped grass tile, without lighting however.

@@ -1,6 +1,6 @@
 LoQMaps.dat is very similar to FilterMaps.dat in both structure and purpose.
-It seems to do a lower quality texture mapping than FilterMaps.dat with no
-blending and simpler lighting.
+It does a lower quality texture mapping than FilterMaps.dat with no blending
+and simpler lighting. It is used with low quality terrain rendering.
 
 The data structures are the same as in FilterMaps.dat, the only difference
 are the pixel descriptions (what I called cmds in the FilterMaps documentation).
