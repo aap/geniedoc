@@ -20,3 +20,20 @@ repeat numModes {
 
 See blendomatic_tc.bmp for the alpha masks and blendomatic_tc_bits.bmp for the bit masks
 of TC's blendomatic.dat
+
+Note that these 9 blend modes are not the same ones from empires2*.dat. And actually
+only 8 blendomatic modes can be used. The game figures out the final blend mode by
+using the database blend modes of a tile and its neighbor as indices into a table:
+
+uchar gBlendModes[8][8] = {
+	{ 2, 3, 2, 1, 1, 6, 5, 4 },
+	{ 3, 3, 3, 1, 1, 6, 5, 4 },
+	{ 2, 3, 2, 1, 1, 6, 1, 4 },
+	{ 1, 1, 1, 0, 7, 6, 5, 4 },
+	{ 1, 1, 1, 7, 7, 6, 5, 4 },
+	{ 6, 6, 6, 6, 6, 6, 5, 4 },
+	{ 5, 5, 1, 5, 5, 5, 5, 4 },
+	{ 4, 3, 4, 4, 4, 4, 4, 4 }
+};
+
+Where the current tile being drawn selects the row, and its neighbor the column.
