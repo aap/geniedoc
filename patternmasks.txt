@@ -6,14 +6,18 @@ repeat 40 {
 	uchar data[size];
 }
 
-The data can be interpreted as a 64x64 pixel indexed/greyscale image.
-The maps seem to be arranged in pairs of two where one is some sort of
-complement of the other. This gives 20 pairs.
+The data can be interpreted as a 64x64 pixel 8 bit image.
 
-Every pixel in the 64x64 textures is interpreted as a brightness value and
-is used to select one of the lightmaps defined in lightmaps.dat.
-The lower two pixels seem to be ignored, so every lightmap corresponds
-to 4 brightness values. Valid values are 0-71 and seem to be identical
-to 128-199 for some reason. Maybe bit 7 does something?
+Every non-flat tile is lit by multiple patternmasks that depend on slope
+type and neighboring slopes types. One patternmask serves as the base with
+which the others are combined.
+Every pixel in the 64x64 textures is a brightness value (lightmap index) plus
+two combination flag bits. For the base pattern the combination flags are ignored.
+For all following patterns if bit 0 of a pixel is set, it is ignored. If bit 1
+is set, the pixel replaces the current one if it is brighter. If bit 1 is clear,
+the pixel replaces the current one if it is darker. Bits 2-7 are the brightness
+value. However do note that the uppermost bit is masked off in the end, it is
+used with bit 1 to effectively replace any value (it is brighter than any
+pixel in the 0-17 range).
 
-See patternmasks.bmp (arranged in 4x10 however)
+See patternmasks.bmp (arranged in 4x10)
